@@ -64,3 +64,15 @@ console.log(age);
 console.log(a);
 
 }
+
+
+
+//for saving username 
+let username ;
+document.getElementById("button").onclick=function(){
+
+username=document.getElementById("Fname").value;
+
+window.alert(username);
+document.getElementById("changetext").innerHTML=username;
+};

@@ -60,7 +60,7 @@ document.getElementById("count").innerHTML =count;
     
 document.getElementById("reset").onclick= function(){
     
-    count =5;
+    count =0;
     document.getElementById("count").innerHTML =count;
         
         

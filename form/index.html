@@ -9,6 +9,36 @@
     
     <title>Form Validation</title>
 </head>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    flatpickr("#dob", {
+        dateFormat: "Y-m-d",
+        maxDate: "2003-12-31", // Restrict the maximum selectable date to be 18 years ago
+        minDate: "1906-01-01", // Restrict the minimum selectable date to be January 1, 1906
+        placeholder: "Select Date of Birth",
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get the feedback button element
+        const feedbackButton = document.getElementById('feedbackButton');
+    
+        // Add click event listener to the feedback button
+        feedbackButton.addEventListener('click', function() {
+            // Load the feedback page content
+            fetch('feedback.html')
+            .then(response => response.text())
+            .then(html => {
+                // Replace the entire body content with the fetched content
+                document.body.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error fetching feedback:', error);
+            });
+        });
+    });
+    
+    
+
+</script>
 <body>
     <h1><span class="cf-gradient-span">Registration</span></h1>
     <div class="container">
@@ -57,7 +87,7 @@
 
             <div class="form-field">
                 <label for="dob">Date of Birth:</label>
-                <input type="date" name="dob" id="dob" max="2001-12-31">
+                <input type="text" name="dob" id="dob" placeholder="Select Date of Birth">
                 <small></small>
             </div>
 
@@ -73,8 +103,11 @@
 
             <div class="form-field">
                 <label for="password">Password:</label>
+                <div class="form-field input-group">
                 <input type="password" name="password" id="password" autocomplete="off">
+                <i class="bi bi-eye-slash" id="togglePassword2"></i>
                 <small></small>
+            </div>
             </div>
 
             <div class="form-field">
@@ -88,8 +121,14 @@
 
             <div class="form-field">
                 <input class="btn" type="submit" value="Apply">
+                
             </div>
+           
+            
         </form>
+        <div class="form-field">
+            <button id="feedbackButton" class="btn">Feedback</button>
+        </div>
     </div>
 
     <script src="index.js"></script>

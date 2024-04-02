@@ -9,7 +9,31 @@ const username = document.querySelector('#username');
         const gender = document.querySelector('#gender'); // Add this line
         const form = document.querySelector('#signup');
         const togglePassword = document.querySelector("#togglePassword");
+        const togglePassword2 = document.querySelector("#togglePassword2");
 
+       
+
+   
+
+        // Event listener to prevent digits in the username field
+        phone.addEventListener('keydown', function(event) {
+            // Check if the pressed key is not a digit and not the backspace key
+            if (!(/\d/.test(event.key) || event.key === "Backspace")) {
+                // Prevent default behavior (typing the character)
+                event.preventDefault();
+            }
+        });
+        
+        
+          // Event listener to prevent digits in the username field
+          username.addEventListener('keydown', function(event) {
+            // Check if the pressed key is a digit
+            if (/\d/.test(event.key)) {
+                // Prevent default behavior (typing the digit)
+                event.preventDefault();
+            }
+        });
+        
         // Shows error message
         const showError = (input, message) => {
             const formField = input.parentElement;
@@ -85,37 +109,54 @@ const username = document.querySelector('#username');
             }
             return valid;
         };
+const hasMinimumLength = value => value.length >= 8;
+const hasLowerCase = value => /[a-z]/.test(value);
+const hasUpperCase = value => /[A-Z]/.test(value);
+const hasNumber = value => /[0-9]/.test(value);
+const hasSpecialCharacter = value => /[!@#$%^&*]/.test(value);
 
-        // Validate password
         const checkPassword = () => {
             let valid = false;
             const passwordVal = password.value.trim();
-            if (isRequired(passwordVal)) { // Modified this line
+        
+            if (isRequired(passwordVal)) {
                 showError(password, 'Password cannot be blank.');
-            } else if (!isPasswordSecure(passwordVal)) {
-                showError(password, 'Password must have at least 8 characters including at least 1 lowercase character, 1 uppercase character, 1 number, and 1 special character in (!@#$%^&*)');
             } else {
                 showSuccess(password);
-                valid = true;
+                
+                if (!hasMinimumLength(passwordVal)) {
+                    showError(password, 'Password must have at least 8 characters.');
+                } else if (!hasLowerCase(passwordVal)) {
+                    showError(password, 'Password must contain at least 1 lowercase character.');
+                } else if (!hasUpperCase(passwordVal)) {
+                    showError(password, 'Password must contain at least 1 uppercase character.');
+                } else if (!hasNumber(passwordVal)) {
+                    showError(password, 'Password must contain at least 1 number.');
+                } else if (!hasSpecialCharacter(passwordVal)) {
+                    showError(password, 'Password must contain at least 1 special character (!@#$%^&*).');
+                } else {
+                    valid = true;
+                }
             }
+        
             return valid;
         };
+// Validate confirm password
+const checkConfirmPassword = () => {
+    let valid = false;
+    const confirmPasswordVal = confirmPassword.value.trim();
+    const passwordVal = password.value.trim();
+    if (isRequired(confirmPasswordVal)) {
+        showError(confirmPassword, 'Confirm Password is required');
+    } else if (passwordVal !== confirmPasswordVal) {
+        showError(confirmPassword, 'Confirm Password does not match');
+    } else {
+        showSuccess(confirmPassword);
+        valid = true;
+    }
+    return valid;
+};
 
-        // Validate confirm password
-        const checkConfirmPassword = () => {
-            let valid = false;
-            const confirmPasswordVal = confirmPassword.value.trim();
-            const passwordVal = password.value.trim();
-            if (isRequired(confirmPasswordVal)) { // Modified this line
-                showError(confirmPassword, 'Confirm Password is required');
-            } else if (passwordVal !== confirmPasswordVal) {
-                showError(confirmPassword, 'Confirm Password does not match');
-            } else {
-                showSuccess(confirmPassword);
-                valid = true;
-            }
-            return valid;
-        };
 
         // Validate phone number
         const checkPhoneNumber = () => {
@@ -200,6 +241,12 @@ const username = document.querySelector('#username');
             this.classList.toggle("bi-eye");
         });
 
+        
+        togglePassword2.addEventListener("click", function () {
+            const type =password.getAttribute("type") === "password" ? "text" : "password";
+            password.setAttribute("type", type);
+            this.classList.toggle("bi-eye");
+        });
         // Modify submit event handler
         form.addEventListener('submit', function (e) {
             e.preventDefault();
